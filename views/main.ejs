@@ -1,13 +1,15 @@
 <div id="about">
   <!-- <img src="assets/bot.png" alt=""> -->
-  <p style="background: #391a58b5;color: white;">Enter Urls to Extract Emails From</p>
+  <p style="background: #391a58b5; color: white">
+    Enter Urls to Extract Emails From
+  </p>
 </div>
 
-<div class="mcnt">
+<div class="container">
   <div class="fcnt">
-    <form class="row g-3" style="display: grid;">
+    <form class="row g-3" style="display: grid">
       <div class="col-12">
-        <p style="text-align: center;">URL</p>
+        <p style="text-align: center">URL</p>
         <textarea
           type="text"
           class="form-control"
@@ -15,11 +17,40 @@
           id="url1"
           placeholder="www.example.com"
           required
-        > </textarea>
+        >
+        </textarea>
       </div>
     </form>
-    <div class="col-12">
-      <button  class="btn" id="submit" style="background:#825ca8;color: white">EXTRACT</button>
+    <div style="display: flex;margin-top: 20px;justify-content: center;">
+      <button class="btn" id="submit" style="background: #825ca8; color: white">
+        EXTRACT
+      </button>
     </div>
   </div>
+</div>
+<div id="load">
+  <span>
+    Processing
+    <img src="https://wpamelia.com/wp-content/uploads/2018/11/ezgif-2-6d0b072c3d3f.gif" alt="">
+  </span>
+</div>
+<div class="rcnt">
+  <img src="https://c.tenor.com/hE0T8D0GpXsAAAAC/joinblink-blink.gif" alt="" />
+  <div class="status">
+    <div style="background:#f8d7da45;color:black;">
+    <p class="alert alert-danger">Unreachable</p>
+    <ul id="urli"></ul>
+    </div>
+    
+    <div style="background:#d3d3d417;color:black;">
+      <p class="alert alert-dark">No-emails</p>
+      <ul id="nli"></ul>
+    </div>
+    <div style="background:#eefaee;color:black;">
+      <p class="alert alert-success">successful</p>
+      <ul id="sli"></ul>
+    </div>
+  </div>
+  <p style="margin-top:40px;">The result is produced in a .csv file</p>
+  <a href="results/emails.csv" download> Download Results</a>
 </div>

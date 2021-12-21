@@ -7,7 +7,6 @@ const fs = require("fs");
 const app = express();
 const port = process.env.PORT || 3000;
 
-
 //////////////////  middleware ////////////////
 
 app.use(expresslayouts);
@@ -20,52 +19,42 @@ const urlencoded = bodyparser.urlencoded({ extended: false });
 const request = (req, res, next) => {
   var urls = [];
   const re = req.body;
- var status={
-   e1:[],
-   e2:[],
-   success:[],
-   len:0
- }  
-
-  urls=re.url.split(/[,\s\n]+/)
-  for (key in urls) {
-    console.log(urls[key])
-   scrapper(urls[key],status); ////////////////puppeteere
+  var status = {
+    e1: [],
+    e2: [],
+    success: [],
+    len: 0,
+    done: false,
+  };
+  console.log("i1");
+  urls = re.url.split(/[,\s\n]+/);
+  len = urls.length;
+  console.log(urls)
+  for (key in urls) { ////////////////puppeteere
+    scrapper(urls[key], status, len).then(() =>  {if (status.done) {console.log(status); res.send(status)}});
   }
-  re.urls = urls;
+
   next();
 };
 
 ///////////////////// endpoints ////////////////////
 
 app.get("/", (req, res) => {
-  res.render("main", { title: "Email Extractor" , errormessage:""});
+  res.render("main", { title: "Email Extractor", errormessage: "" });
 });
 
 app.post("/find", urlencoded, request, (req, res) => {
   try {
-    if (fs.existsSync("public/results/emails.csv")) {           //////file exists
-      fs.unlink("public/results/emails.csv", function (err) {    ///////delete file
+    if (fs.existsSync("public/results/emails.csv")) {
+      //////file exists
+      fs.unlink("public/results/emails.csv", function (err) {
+        ///////delete file
         if (err) throw err;
         console.log("File deleted!");
       });
     }
-  } finally {
-    const re = req.body;
-    if (re.url) {
-      // res.send(re.urls)
-      setTimeout(
-        () =>
-          res.render("result", {
-            title: "Results",
-            data: re,
-          }),
-        6000
-      );
-    } else
-      res.render("main", {
-        title: "Email Extractor",
-      });
+  } catch (e) {
+    console.log(e);
   }
 });
 
