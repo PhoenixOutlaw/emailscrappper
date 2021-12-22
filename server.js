@@ -3,7 +3,6 @@ const expresslayouts = require("express-ejs-layouts");
 const bodyparser = require("body-parser");
 const { scrapper } = require("./searchbot/scrapper.js");
 const fs = require("fs");
-
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -27,15 +26,13 @@ const request = (req, res, next) => {
     len: 0,
     done: false,
   };
-  console.log("i1");
+
   urls = re.url.split(/[,\s\n]+/);
   len = urls.length;
-  console.log(urls);
+
   try {
-    if (fs.existsSync("public/results/emails.csv")) {
-      //////file exists
-      fs.unlink("public/results/emails.csv", function (err) {
-        ///////delete file
+    if (fs.existsSync("public/results/emails.csv")) {             //////file exists
+      fs.unlink("public/results/emails.csv", function (err) {     ///////delete file
         if (err) throw err;
         console.log("File deleted!");
       });
@@ -43,8 +40,7 @@ const request = (req, res, next) => {
   } catch (e) {
     console.log(e);
   } finally {
-    for (key in urls) {
-      ////////////////puppeteere
+    for (key in urls) {                                      ////////////////puppeteere
       scrapper(urls[key], status, len).then(() => {
         if (status.done && fl) {
           fl = false;
@@ -62,7 +58,7 @@ app.get("/", (req, res) => {
   res.render("main", { title: "Email Extractor", errormessage: "" });
 });
 
-app.post("/find", urlencoded, request, (req, res) => {});
+app.post("/find", urlencoded, request);
 
 /////////////////////////////////////////////
 
