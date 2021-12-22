@@ -17,7 +17,7 @@ app.set("view engine", "ejs");
 const urlencoded = bodyparser.urlencoded({ extended: false });
 
 const request = (req, res, next) => {
-  var urls = [];
+  var urls = [],fl=true;
   const re = req.body;
   var status = {
     e1: [],
@@ -31,10 +31,16 @@ const request = (req, res, next) => {
   len = urls.length;
   console.log(urls)
   for (key in urls) { ////////////////puppeteere
-    scrapper(urls[key], status, len).then(() =>  {if (status.done) {console.log(status); res.send(status)}});
+    scrapper(urls[key], status, len)
+    .then(() =>  {
+      if (status.done && fl) 
+      {
+        fl=false;
+        res.send(status); 
+        next();
+      }
+    });
   }
-
-  next();
 };
 
 ///////////////////// endpoints ////////////////////
