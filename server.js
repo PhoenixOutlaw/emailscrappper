@@ -17,7 +17,8 @@ app.set("view engine", "ejs");
 const urlencoded = bodyparser.urlencoded({ extended: false });
 
 const request = (req, res, next) => {
-  var urls = [],fl=true;
+  var urls = [],
+    fl = true;
   const re = req.body;
   var status = {
     e1: [],
@@ -29,27 +30,7 @@ const request = (req, res, next) => {
   console.log("i1");
   urls = re.url.split(/[,\s\n]+/);
   len = urls.length;
-  console.log(urls)
-  for (key in urls) { ////////////////puppeteere
-    scrapper(urls[key], status, len)
-    .then(() =>  {
-      if (status.done && fl) 
-      {
-        fl=false;
-        res.send(status); 
-        next();
-      }
-    });
-  }
-};
-
-///////////////////// endpoints ////////////////////
-
-app.get("/", (req, res) => {
-  res.render("main", { title: "Email Extractor", errormessage: "" });
-});
-
-app.post("/find", urlencoded, request, (req, res) => {
+  console.log(urls);
   try {
     if (fs.existsSync("public/results/emails.csv")) {
       //////file exists
@@ -61,8 +42,27 @@ app.post("/find", urlencoded, request, (req, res) => {
     }
   } catch (e) {
     console.log(e);
+  } finally {
+    for (key in urls) {
+      ////////////////puppeteere
+      scrapper(urls[key], status, len).then(() => {
+        if (status.done && fl) {
+          fl = false;
+          res.send(status);
+          next();
+        }
+      });
+    }
   }
+};
+
+///////////////////// endpoints ////////////////////
+
+app.get("/", (req, res) => {
+  res.render("main", { title: "Email Extractor", errormessage: "" });
 });
+
+app.post("/find", urlencoded, request, (req, res) => {});
 
 /////////////////////////////////////////////
 
